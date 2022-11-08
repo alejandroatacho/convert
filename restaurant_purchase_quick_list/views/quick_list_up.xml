@@ -1,0 +1,132 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="product_quick_template_list_view">
+            <field name="name">product.quick.template.list</field>
+            <field name="model">product.quick.template</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="product_id"/>
+                    <field name="uom_category_id" invisible="1"/>
+                    <button name="action_remove" string="-" type="object" class="oe_highlight"/>
+                    <field name="quantity"/>
+                    <button name="action_add" string="+" type="object" class="oe_highlight"/>
+                    <field name="uom_id"/>
+                    <field name="partner_id"/>
+                    <field name="price_unit"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="product_quick_template_kanban_view">
+            <field name="name">product.quick.template.kanban</field>
+            <field name="model">product.quick.template</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile">
+                    <field name="product_id"/>
+                    <field name="quantity"/>
+                    <field name="partner_id"/>
+                    <field name="price_unit"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <strong>
+                                            <span t-esc="record.product_id.value"/>
+                                        </strong>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 text-muted">
+                                        <span>
+                                            Quantity:
+                                            <t t-esc="record.quantity.value"/>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 text-muted">
+                                        <span>
+                                            Price Unit:
+                                            <t t-esc="record.price_unit.value"/>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        Vendor:
+                                        <span t-esc="record.partner_id.value"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="quik_list_last_form_view">
+            <field name="name">quick.list.last.form</field>
+            <field name="model">quick.list.last</field>
+            <field name="arch" type="xml">
+                <form class="o_purchase_order">
+                    <header>
+                        <button name="send_po" type="object" string="Send.P.O" icon="fa-external-link"
+                                class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_open_rfq" type="object" class="oe_stat_button" icon="fa-credit-card">
+                                <div class="o_stat_info">
+                                    <field name="purchase_order_count" class="o_stat_value"/>
+                                    <span class="o_stat_text">P.O</span>
+                                </div>
+                            </button>
+                        </div>
+                        <b>
+                            <field name="name"/>
+                            <field name="reset" invisible="1"/>
+                            <field name="track" invisible="1"/>
+                        </b>
+                        <field name="product_quick_template_id" nolabel="1">
+                            <tree editable="bottom" limit="1000">
+                                <field name="product_id"/>
+                                <field name="uom_category_id" invisible="1"/>
+                                <button name="action_remove" string="-" type="object" class="oe_highlight"/>
+                                <field name="quantity"/>
+                                <button name="action_add" string="+" type="object" class="oe_highlight"/>
+                                <field name="uom_id"/>
+                                <field name="partner_id"/>
+                                <field name="price_unit"/>
+                            </tree>
+                        </field>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="quik_list_last_tree_view">
+            <field name="name">quick.list.last.tree</field>
+            <field name="model">quick.list.last</field>
+            <field name="arch" type="xml">
+                <tree default_order='name asc' limit="0">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="quick_list_last_act">
+            <field name="name">Quick List Last</field>
+            <field name="res_model">quick.list.last</field>
+            <field name="context">{'form' : 'open','qty':0}</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Quick Order List"
+                  id="quick_order_res_list_2"
+                  parent="purchase.menu_procurement_management"
+                  action="quick_list_last_act"
+                  sequence="1002"
+        />
+    </data>
+</odoo>
