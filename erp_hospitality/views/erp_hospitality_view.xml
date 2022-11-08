@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- <record id="res_partner_view_search_hospitality" model="ir.ui.view">
+        <field name="name">res_partner_view_search_hospitality</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='inactive']" position="before"> -->
+                <!-- <field name="receive_picking_ids"/> -->
+                <!-- <filter string="Receive PO" name="receive_po" domain="[('receive_picking_ids.state', 'not in', ('done', 'cancel'))]"/> -->
+<!--                <separator/>
+            </xpath>
+        </field>
+    </record> -->
+
+    <record id="act_show_all_receive_po" model="ir.actions.act_window">
+        <field name="name">Purchase Order</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree,form,kanban,calendar,pivot,graph,activity</field>
+        <field name="domain">[('partner_id', '=', active_id)]</field>
+        <field name="context">{
+            'default_partner_id': active_id,
+        }</field>
+        <!-- <field name="search_view_id" ref="view_task_search_form"/> -->
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No tasks found. Let's create one!
+            </p><p>
+                To get things done, use activities and status on tasks.<br/>
+                Chat in real-time or by email to collaborate efficiently.
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="receive_hospitality_kanban_view">
+        <field name="name">res.partner.kanban</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <kanban class="o_res_partner_kanban" sample="1">
+                <field name="id"/>
+                <field name="color"/>
+                <field name="display_name"/>
+                <field name="title"/>
+                <field name="email"/>
+                <field name="parent_id"/>
+                <field name="is_company"/>
+                <field name="function"/>
+                <field name="phone"/>
+                <field name="street"/>
+                <field name="street2"/>
+                <field name="zip"/>
+                <field name="city"/>
+                <field name="country_id"/>
+                <field name="mobile"/>
+                <field name="state_id"/>
+                <field name="category_id"/>
+                <field name="image_128"/>
+                <field name="type"/>
+                <field name="purchase_order_count"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
+                            <t t-if="!record.is_company.raw_value">
+                                <t t-set="background_image" t-value="kanban_image('res.partner', 'image_128', record.id.raw_value)"/>
+                                <div class="o_kanban_image_fill_left d-none d-md-block" t-attf-style="background-image:url('#{background_image}')">
+                                    <img class="o_kanban_image_inner_pic" t-if="record.parent_id.raw_value" t-att-alt="record.parent_id.value" t-att-src="kanban_image('res.partner', 'image_128', record.parent_id.raw_value)"/>
+                                </div>
+                                <div class="o_kanban_image d-md-none" t-attf-style="background-image: url(#{background_image})">
+                                    <img class="o_kanban_image_inner_pic" t-if="record.parent_id.raw_value" t-att-alt="record.parent_id.value" t-att-src="kanban_image('res.partner', 'image_128', record.parent_id.raw_value)"/>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div class="o_kanban_image_fill_left o_kanban_image_full" t-attf-style="background-image: url(#{kanban_image('res.partner', 'image_128', record.id.raw_value)})" role="img"/>
+                            </t>
+                            <div class="oe_kanban_details d-flex flex-column">
+                                <strong class="o_kanban_record_title oe_partner_heading"><field name="display_name"/></strong>
+                                <div class="o_kanban_tags_section oe_kanban_partner_categories"/>
+                                <ul>
+                                    <li t-if="record.parent_id.raw_value and !record.function.raw_value"><field name="parent_id"/></li>
+                                    <li t-if="!record.parent_id.raw_value and record.function.raw_value"><field name="function"/></li>
+                                    <li t-if="record.parent_id.raw_value and record.function.raw_value"><field name="function"/> at <field name="parent_id"/></li>
+                                    <li t-if="record.city.raw_value or record.country_id.raw_value">
+                                        <t t-if="record.city.raw_value"><field name="city"/><t t-if="record.country_id.raw_value">, </t></t>
+                                        <t t-if="record.country_id.raw_value"><field name="country_id"/></t>
+                                    </li>
+                                    <li t-if="record.email.raw_value" class="o_text_overflow"><field name="email"/></li>
+                                </ul>
+                                <div class="o_row">
+                                    <h2>
+                                        <span class="badge badge-primary oe_kanban_partner_links">
+                                            <a class="o_project_kanban_box" name="action_view_receive_po" type="object" style="color:white;">
+                                                <!-- <div> -->
+                                                    <span class="o_value w-50"><t t-esc="record.purchase_order_count.value"/></span>
+                                                    <span class=" o_label w-50">Purchase Order</span>
+                                                <!-- </div> -->
+                                            </a>
+                                        </span>
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="account_receive_hospitality_kanban_view">
+        <field name="name">res.partner.kanban</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <kanban class="o_res_partner_kanban" sample="1">
+                <field name="id"/>
+                <field name="color"/>
+                <field name="display_name"/>
+                <field name="title"/>
+                <field name="email"/>
+                <field name="parent_id"/>
+                <field name="is_company"/>
+                <field name="function"/>
+                <field name="phone"/>
+                <field name="street"/>
+                <field name="street2"/>
+                <field name="zip"/>
+                <field name="city"/>
+                <field name="country_id"/>
+                <field name="mobile"/>
+                <field name="state_id"/>
+                <field name="category_id"/>
+                <field name="image_128"/>
+                <field name="type"/>
+                <field name="account_bill_waiting_count"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
+                            <t t-if="!record.is_company.raw_value">
+                                <t t-set="background_image" t-value="kanban_image('res.partner', 'image_128', record.id.raw_value)"/>
+                                <div class="o_kanban_image_fill_left d-none d-md-block" t-attf-style="background-image:url('#{background_image}')">
+                                    <img class="o_kanban_image_inner_pic" t-if="record.parent_id.raw_value" t-att-alt="record.parent_id.value" t-att-src="kanban_image('res.partner', 'image_128', record.parent_id.raw_value)"/>
+                                </div>
+                                <div class="o_kanban_image d-md-none" t-attf-style="background-image: url(#{background_image})">
+                                    <img class="o_kanban_image_inner_pic" t-if="record.parent_id.raw_value" t-att-alt="record.parent_id.value" t-att-src="kanban_image('res.partner', 'image_128', record.parent_id.raw_value)"/>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div class="o_kanban_image_fill_left o_kanban_image_full" t-attf-style="background-image: url(#{kanban_image('res.partner', 'image_128', record.id.raw_value)})" role="img"/>
+                            </t>
+                            <div class="oe_kanban_details d-flex flex-column">
+                                <strong class="o_kanban_record_title oe_partner_heading"><field name="display_name"/></strong>
+                                <div class="o_kanban_tags_section oe_kanban_partner_categories"/>
+                                <ul>
+                                    <li t-if="record.parent_id.raw_value and !record.function.raw_value"><field name="parent_id"/></li>
+                                    <li t-if="!record.parent_id.raw_value and record.function.raw_value"><field name="function"/></li>
+                                    <li t-if="record.parent_id.raw_value and record.function.raw_value"><field name="function"/> at <field name="parent_id"/></li>
+                                    <li t-if="record.city.raw_value or record.country_id.raw_value">
+                                        <t t-if="record.city.raw_value"><field name="city"/><t t-if="record.country_id.raw_value">, </t></t>
+                                        <t t-if="record.country_id.raw_value"><field name="country_id"/></t>
+                                    </li>
+                                    <li t-if="record.email.raw_value" class="o_text_overflow"><field name="email"/></li>
+                                </ul>
+                                <div class="o_row">
+                                    <h2>
+                                        <span class="badge badge-primary oe_kanban_partner_links">
+                                            <a class="o_project_kanban_box" name="action_view_bill_waiting_receive_po" type="object" style="color:white;">
+                                                <!-- <div> -->
+                                                    <span class="o_value w-50"><t t-esc="record.account_bill_waiting_count.value"/></span>
+                                                    <span class=" o_label w-50">Purchase Order</span>
+                                                <!-- </div> -->
+                                            </a>
+                                        </span>
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="receive_action_hospitality" model="ir.actions.act_window">
+        <field name="name">Receive</field>
+        <!-- <field name="type">ir.actions.act_window</field> -->
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban</field>
+        <field name="domain">[('purchase_line_ids.state','=', 'purchase'),('partner_picking_order_count','&gt;',0)]</field>
+        <field name="context">{'search_default_receive_po' : 1}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new Receive in your address book
+          </p>
+        </field>
+    </record>
+
+    <record id="account_receive_action_hospitality" model="ir.actions.act_window">
+        <field name="name">Receive</field>
+        <!-- <field name="type">ir.actions.act_window</field> -->
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban</field>
+        <field name="domain">[('purchase_line_ids.order_id.invoice_status','=', 'to invoice')]</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new Receive in your address book
+          </p>
+        </field>
+    </record>
+
+    <record id="purchase_order_view_form_inherit_hospitality" model="ir.ui.view">
+        <field name="name">purchase_order_view_form_inherit_hospitality</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase_stock.purchase_order_view_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_view_picking']" position="attributes">
+                <attribute name="groups">stock.group_stock_user,erp_hospitality.group_erp_hospitality,erp_hospitality.group_erp_hospitality_quick_order_reservation_receive,erp_hospitality.group_erp_hospitality_account_receive,erp_hospitality.group_erp_hospitality_quick_order_receive</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_picking_form_custom_inherit_erp_hospitality" model="ir.ui.view">
+        <field name="name">view_picking_form_custom_inherit_erp_hospitality</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='button_validate']" position="attributes">
+                <attribute name="groups">stock.group_stock_user,erp_hospitality.group_erp_hospitality,erp_hospitality.group_erp_hospitality_quick_order_reservation_receive,erp_hospitality.group_erp_hospitality_account_receive,erp_hospitality.group_erp_hospitality_quick_order_receive</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="vendor_po_hospitality_kanban_view">
+        <field name="name">purchase.order.kanban</field>
+        <field name="model">purchase.order</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" sample="1">
+                <field name="name"/>
+                <field name="partner_id" readonly="1"/>
+                <field name="amount_total"/>
+                <field name="state"/>
+                <field name="date_order"/>
+                <field name="currency_id" readonly="1"/>
+                <field name="activity_state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
+                            <t t-set="background_image" t-value="kanban_image('res.partner', 'image_128', record.partner_id.raw_value)"/>
+                            <div class="o_kanban_image_fill_left o_kanban_image_full" t-attf-style="background-image: url(#{kanban_image('res.partner', 'image_128', record.partner_id.raw_value)})" role="img"/>
+                        
+                            <div class="oe_kanban_details d-flex flex-column">
+                                <strong class="o_kanban_record_title"><span><t t-esc="record.partner_id.value"/></span></strong>
+                                <div class="o_kanban_tags_section oe_kanban_partner_categories"/>
+                                <ul>
+                                    <li><field name="name"/></li>
+                                    <li t-if="record.date_order.value"><field name="date_order"/></li>
+                                    <li><strong><field name="amount_total" widget="monetary"/></strong></li>
+                                    <li>
+                                        <field name="state" widget="label_selection" options="{'classes': {'draft': 'default', 'cancel': 'default', 'done': 'success', 'approved': 'warning'}}"/>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_vendor_po_kanban_view" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="receive_hospitality_kanban_view"/>
+        <field name="act_window_id" ref="erp_hospitality.receive_action_hospitality"/>
+    </record>
+
+    <record id="account_action_vendor_po_kanban_view" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="account_receive_hospitality_kanban_view"/>
+        <field name="act_window_id" ref="erp_hospitality.account_receive_action_hospitality"/>
+    </record>
+
+    <record id="point_of_sale.menu_point_root" model="ir.ui.menu">
+        <field name="groups_id" eval="[(3, ref('point_of_sale.group_pos_user'))]"/>
+    </record>
+
+    <!-- <record id="mail.menu_root_discuss" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('sales_team.group_sale_salesman'),
+        ref('sales_team.group_sale_salesman_all_leads'),
+        ref('stock.group_stock_user'),
+        ref('purchase.group_purchase_user')])]"/>
+    </record> -->
+
+    <record id="website_calendar_booking.reservation_management_main_menu" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('website_calendar_booking.group_reservation_management_user'),
+        ref('sales_team.group_sale_salesman'),
+        ref('sales_team.group_sale_salesman_all_leads'),
+        ref('stock.group_stock_user'),
+        ref('purchase.group_purchase_user')])]"/>
+    </record>
+
+    <!-- <record id="website.menu_website_configuration" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('website.group_website_designer'),
+        ref('website.group_website_publisher')])]"/>
+    </record> -->
+
+    <!-- <record id="calendar.mail_menu_calendar" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('sales_team.group_sale_salesman'),
+        ref('sales_team.group_sale_salesman_all_leads'),
+        ref('stock.group_stock_user'),
+        ref('purchase.group_purchase_user'),])]"/>
+    </record>custom_sales_dashboard_action
+ -->
+    <menuitem name="Reservation" id="main_menu_reservation_management"
+        groups="erp_hospitality.group_erp_hospitality,erp_hospitality.group_erp_hospitality_quick_order_reservation_receive"
+        web_icon="erp_hospitality,static/description/Reservation.png"
+        sequence="1"
+        action="website_calendar_booking.custom_sales_dashboard_action"/>
+
+    <menuitem name="Dashboard" id="menu_reservation_dashboard"
+        groups="erp_hospitality.group_erp_hospitality,erp_hospitality.group_erp_hospitality_quick_order_reservation_receive"
+        action="website_calendar_booking.custom_sales_dashboard_action"
+        sequence="1"
+        parent="main_menu_reservation_management"/>
+
+    <menuitem name="Reservation Management" 
+        id="menu_reservation_management"
+        groups="erp_hospitality.group_erp_hospitality,erp_hospitality.group_erp_hospitality_quick_order_reservation_receive"
+        action="website_calendar_booking.action_reservationt_mgmnt"
+        sequence="2"
+        parent="main_menu_reservation_management"/>
+
+    <menuitem
+        id="hospitality_reservation_config_main_menu"
+        name="Configuration"
+        parent="main_menu_reservation_management"
+        groups="erp_hospitality.group_erp_hospitality,erp_hospitality.group_erp_hospitality_quick_order_reservation_receive"/>
+
+   <!--  <menuitem id="hospitality_menu_reservation_global_settings" 
+        name="Settings"
+        parent="hospitality_reservation_config_main_menu"
+        sequence="1"
+        action="website_calendar_booking.action_reservation_community_configuration"/> -->
+
+    <menuitem
+        action="website_calendar_booking.action_time_mgmnt_share"
+        id="hospitality_time_managment_main_share_submenu"
+        parent= "hospitality_reservation_config_main_menu"
+        sequence= "1"
+        name= "Share Time Frame"/>
+
+    <menuitem
+        action="website_calendar_booking.action_time_mgmnt"
+        id= "hospitality_time_managment_main_submenu"
+        parent= "hospitality_reservation_config_main_menu"
+        sequence= "3"
+        name= "Time Frame"/>
+
+    <menuitem
+        action="website_calendar_booking.action_date_slot_mgmnt"
+        id="date_timeslot_main_submenu"
+        parent="hospitality_reservation_config_main_menu"
+        sequence="2"
+        name="Time Slot Date Wise"/>
+
+    <menuitem id="menu_quick_order_list" name="Quick Order List" 
+        sequence="2" groups="erp_hospitality.group_erp_hospitality,erp_hospitality.group_erp_hospitality_quick_order_reservation_receive,erp_hospitality.group_erp_hospitality_quick_order_receive"
+        web_icon="erp_hospitality,static/description/order.png"
+        action="restaurant_purchase_quick_list.quick_list_last_act"/>
+
+    <record id="action_pos_config_kanban_erp_hospitality" model="ir.actions.act_window">
+        <field name="name">Point of Sale</field>
+        <!-- <field name="type">ir.actions.act_window</field> -->
+        <field name="res_model">pos.config</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain"></field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new PoS
+            </p><p>
+                Configure at least one Point of Sale.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_pos" name="POS" 
+        sequence="3" groups="erp_hospitality.group_erp_hospitality"
+        web_icon="erp_hospitality,static/description/pos.png"
+        action="action_pos_config_kanban_erp_hospitality"/>
+
+    <menuitem id="menu_receive" name="Receive" 
+        sequence="4" groups="erp_hospitality.group_erp_hospitality,erp_hospitality.group_erp_hospitality_quick_order_reservation_receive,erp_hospitality.group_erp_hospitality_quick_order_receive"
+        web_icon="erp_hospitality,static/description/receive.png"
+        action="receive_action_hospitality"/>
+
+    <menuitem id="menu_account_receive" name="Receive" 
+        sequence="4" groups="erp_hospitality.group_erp_hospitality_account_receive"
+        web_icon="erp_hospitality,static/description/receive.png"
+        action="account_receive_action_hospitality"/>
+
+</odoo>

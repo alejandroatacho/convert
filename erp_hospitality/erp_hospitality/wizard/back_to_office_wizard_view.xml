@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <record id="back_office_form_wizard_view" model="ir.ui.view">
+        <field name="name">Back Office Form Wizard View</field>
+        <field name="model">back.office</field>
+        <field name="arch" type="xml">
+            <form>
+                <p>
+                Are you want to Back to Office ?
+                </p>
+                <footer>
+                    <button name="back_to_office_action" string="Confirm" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- <record id="action_back_office" model="ir.actions.act_window">
+        <field name="name">Back - Office</field>
+        <field name="res_model">back.office</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record> -->
+
+    <record id="action_back_office" model="ir.actions.server">
+        <field name="name">Back - Office</field>
+        <!-- <field name="condition">True</field> -->
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_back_office" />
+        <field name="state">code</field>
+        <field name="code">
+            action = model.back_to_office_action()
+        </field>
+    </record>
+
+    <menuitem action="action_back_office" 
+        id="menu_back_office" 
+        sequence="5"
+        groups="erp_hospitality.group_erp_back_to_office,erp_hospitality.group_erp_hospitality_account_receive"
+        web_icon="erp_hospitality,static/description/back_office.png"/>
+
+</odoo>

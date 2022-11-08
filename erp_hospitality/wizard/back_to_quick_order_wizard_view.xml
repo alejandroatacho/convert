@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_quick_order_erp_hospitality" model="ir.actions.server">
+        <field name="name">Quick Order</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_back_quick_order"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = model.action_back_to_quick_order()
+        </field>
+    </record>
+
+    <menuitem id="menu_erp_hospitality_quick_order_list" name="Quick Order List" 
+        sequence="2" groups="erp_hospitality.group_erp_hospitality_account_receive"
+        web_icon="erp_hospitality,static/description/order.png"
+        action="action_quick_order_erp_hospitality"/>
+
+</odoo>
